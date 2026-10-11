@@ -20,8 +20,11 @@ type KeyShare struct {
 	params *Params
 	rho    [32]byte // seed of A
 	tr     [64]byte // H(pk)
-	s1     []internal.VecL
-	s2     []internal.VecK
+
+	// Share j belongs to the parties in subsets[j]; every party in that subset holds the same (s1[j], s2[j]).
+	subsets []uint8
+	s1      []internal.VecL
+	s2      []internal.VecK
 }
 
 // ID returns the party index in [0, N).
@@ -31,12 +34,6 @@ func (ks *KeyShare) ID() uint8 { return ks.id }
 func (ks *KeyShare) Params() *Params { return ks.params }
 
 var errNotImplemented = errors.New("mldsa44/threshold: not implemented yet")
-
-// GenerateKeys returns a public key and N key shares (paper Fig. 5).
-func GenerateKeys(rand io.Reader, p *Params) (*PublicKey, []*KeyShare, error) {
-	_, _ = rand, p
-	return nil, nil, errNotImplemented
-}
 
 // Round1State is private state carried from Round1 to Round2.
 type Round1State struct{}
